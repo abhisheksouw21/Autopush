@@ -1,0 +1,39 @@
+name: Competitive Programming Sync
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # Runs daily at midnight UTC
+  workflow_dispatch:
+
+jobs:
+  sync-submissions:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Run Sync Script
+        id: run_script
+        env:
+          CF_HANDLE: ${{ secrets.CF_HANDLE }}
+          LC_USERNAME: ${{ secrets.LC_USERNAME }}
+          LEETCODE_SESSION: ${{ secrets.LEETCODE_SESSION }}
+          LEETCODE_CSRF: ${{ secrets.LEETCODE_CSRF }}
+        run: python scripts/sync.py
+
+      - name: Commit and Push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: ${{ steps.run_script.outputs.commit_msg || 'Auto-sync competitive programming solutions' }}
+          file_pattern: 'codeforces/** leetcode/** state.json'
