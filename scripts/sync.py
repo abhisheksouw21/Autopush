@@ -6,10 +6,10 @@ import requests
 from bs4 import BeautifulSoup
 
 # --- Configuration ---
-CF_HANDLE = os.getenv("CF_HANDLE", "abhisheksouw21")
-LC_USERNAME = os.getenv("LC_USERNAME", "")
-LC_SESSION = os.getenv("LEETCODE_SESSION", "")
-LC_CSRF = os.getenv("LEETCODE_CSRF", "")
+CF_HANDLE = os.getenv("CF_HANDLE", "abhisheksouw21").strip()
+LC_USERNAME = os.getenv("LC_USERNAME", "").strip()
+LC_SESSION = os.getenv("LEETCODE_SESSION", "").strip()
+LC_CSRF = os.getenv("LEETCODE_CSRF", "").strip()
 
 STATE_FILE = "state.json"
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'}
